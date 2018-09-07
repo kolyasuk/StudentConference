@@ -1,8 +1,14 @@
 package devlight.edu.conference.model;
 
+import javax.validation.constraints.NotNull;
+
 public class Request_rate {
+
+	@NotNull
 	private int request_id;
+	@NotNull
 	private int juri_id;
+	@NotNull
 	private double mark;
 
 	public Request_rate(int request_id, int juri_id, double mark) {
