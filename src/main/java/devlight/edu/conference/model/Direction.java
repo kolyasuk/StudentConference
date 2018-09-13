@@ -3,22 +3,20 @@ package devlight.edu.conference.model;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import org.hibernate.validator.constraints.NotBlank;
 
-@Getter
-@Setter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Direction {
 
 	@NotNull
 	private int id;
-	@NotNull
+	@NotBlank
 	@Size(min = 2, message = "Direction name must be longer than 2")
 	private String directionName;
 

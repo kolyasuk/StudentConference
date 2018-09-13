@@ -1,43 +1,43 @@
 package devlight.edu.conference.model;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
-@Getter
-@Setter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class Request {
+public class Application {
 
 	@NotNull
 	private int id;
-	@NotNull
+	@NotBlank
 	@Size(min = 2, message = "Name must be longer than 2")
 	private String name;
-	@NotNull
+	@NotBlank
 	@Size(min = 2, message = "Surname must be longer than 2")
 	private String surname;
-	@NotNull
+	@NotBlank
 	private String phone;
 	@NotNull
 	private Date birthdate;
 	@NotNull
-	private byte[][] photo;
+	private int photo_id;
 	@NotNull(message = "Add cv [ls")
-	private byte[][] CV;
+	private int CV_id;
 	@NotNull
 	private double avarageMark;
-	@NotNull
-	@Size(min = 7, message = "Email must be longer than 7")
+	@Email
 	private String email;
 	@NotNull
 	private int direction_id;
@@ -45,5 +45,7 @@ public class Request {
 	private int curator_id;
 	@NotNull
 	private boolean approved;
+	@NotNull
+	private Set<Application_rate> rate_list = new HashSet<Application_rate>(0);
 
 }

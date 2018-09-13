@@ -3,17 +3,13 @@ package devlight.edu.conference.model;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class Request_rate {
+public class Application_rate {
 
 	@NotNull
 	private int request_id;
