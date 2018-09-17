@@ -6,9 +6,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,15 +28,24 @@ public class GeneralController {
 		return applicationService.getApplicationById(id);
 	}
 
-	@GetMapping(value = "/application", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/application")
 	public List<Application> getApplicationList() {
-
 		return applicationService.getAllApplications();
 	}
 
-	@PostMapping(value = "/createApplication", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/application")
 	public void newApplication(@Valid @RequestBody Application application) {
+		applicationService.addApplication(application);
+	}
 
+	@DeleteMapping(value = "/application/{id}")
+	public void deleteApplication(@PathVariable("id") int id) {
+		applicationService.deleteApplication(id);
+	}
+
+	@PutMapping(value = "/application")
+	public void updateApplication(@Valid @RequestBody Application application) {
+		applicationService.updateApplication(application);
 	}
 
 }

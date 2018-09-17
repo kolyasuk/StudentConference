@@ -1,6 +1,5 @@
 package devlight.edu.conference.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +12,16 @@ import devlight.edu.conference.repository.ApplicationRepository;
 public class ApplicationServiceImpl implements ApplicationService {
 
 	@Autowired
-	private ApplicationRepository applicationRepository;
+	ApplicationRepository applicationRepository;
 
 	@Override
 	public Application getApplicationById(int id) {
-		return new Application();
+		return applicationRepository.getOne(id);
 	}
 
 	@Override
 	public List<Application> getAllApplications() {
-		return new ArrayList<Application>();
+		return applicationRepository.findAll();
 	}
 
 	@Override

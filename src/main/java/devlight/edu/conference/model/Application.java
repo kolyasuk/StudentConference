@@ -1,5 +1,6 @@
 package devlight.edu.conference.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +22,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Application {
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class Application implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3084384466548213690L;
 	@Id
 	@GeneratedValue
 	private int id;
@@ -39,7 +47,7 @@ public class Application {
 	@NotNull(message = "Add cv [ls")
 	private int CV_id;
 	@NotNull
-	private double avarageMark;
+	private double avarage_mark;
 	@Email
 	private String email;
 	@NotNull
