@@ -19,7 +19,7 @@ import devlight.edu.conference.service.ApplicationService;
 public class GeneralController {
 
 	@Autowired
-	ApplicationService applicationService;
+	private ApplicationService applicationService;
 
 	@GetMapping(value = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Application getApplication(@PathVariable("id") int id) {
@@ -34,7 +34,7 @@ public class GeneralController {
 
 	@PostMapping(value = "/createApplication", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void newApplication(@Valid @RequestBody Application application) {
-		applicationService.addApplication(application);
+
 	}
 
 }

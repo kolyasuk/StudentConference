@@ -1,9 +1,10 @@
 package devlight.edu.conference.model;
 
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,9 +18,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Application {
 
-	@NotNull
+	@Id
+	@GeneratedValue
 	private int id;
 	@NotBlank
 	@Size(min = 2, message = "Name must be longer than 2")
@@ -45,7 +48,7 @@ public class Application {
 	private int curator_id;
 	@NotNull
 	private boolean approved;
-	@NotNull
-	private Set<Application_rate> rate_list = new HashSet<Application_rate>(0);
+	// @NotNull
+	// private Set<Application_rate> rate_list = new HashSet<Application_rate>(0);
 
 }
