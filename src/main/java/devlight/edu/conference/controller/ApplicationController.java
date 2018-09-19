@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import devlight.edu.conference.model.Application;
 import devlight.edu.conference.service.ApplicationService;
+import devlight.edu.conference.utils.EmailSender;
 
 @RestController
 public class ApplicationController {
 
 	@Autowired
 	ApplicationService applicationService;
+
+	@Autowired
+	EmailSender emailSender;
 
 	@GetMapping(value = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Application getApplication(@PathVariable("id") int id) {
@@ -35,7 +39,14 @@ public class ApplicationController {
 
 	@PostMapping(value = "/application")
 	public void newApplication(@Valid @RequestBody Application application) {
-		applicationService.addApplication(application);
+		if (applicationService.addApplication(application) != null) {
+			try {
+				emailSender.sendEmail("Hi, your application added", "Bingo!", application.getEmail());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	@DeleteMapping(value = "/application/{id}")
