@@ -1,9 +1,9 @@
-package devlight.edu.conference.main;
+package devlight.edu.conference;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "devlight.edu.conference")
 public class StudentConferenceApplication {
 
 	public static void main(String[] args) {

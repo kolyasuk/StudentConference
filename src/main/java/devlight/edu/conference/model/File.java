@@ -3,6 +3,7 @@ package devlight.edu.conference.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -13,14 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Application_rate {
+@Table(name = "blob_file")
+public class File {
 
 	@Id
 	@GeneratedValue
-	private int request_id;
+	private int id;
 	@NotNull
-	private int juri_id;
-	@NotNull
-	private double mark;
+	private byte[] file;
 
 }

@@ -58,13 +58,6 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
-<!-- 		Need for force lazy loading instead @JsonIgnoreProperties({"hibernateLazyInitializer", 
-			"handler"}) in the each class -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-hibernate4</artifactId>
-		</dependency>
 
 	</dependencies>
 

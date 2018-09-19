@@ -18,10 +18,10 @@ import devlight.edu.conference.model.Application;
 import devlight.edu.conference.service.ApplicationService;
 
 @RestController
-public class GeneralController {
+public class ApplicationController {
 
 	@Autowired
-	private ApplicationService applicationService;
+	ApplicationService applicationService;
 
 	@GetMapping(value = "/application/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Application getApplication(@PathVariable("id") int id) {
@@ -44,7 +44,7 @@ public class GeneralController {
 	}
 
 	@PutMapping(value = "/application")
-	public void updateApplication(@Valid @RequestBody Application application) {
+	public void editApplication(@Valid @RequestBody Application application) {
 		applicationService.updateApplication(application);
 	}
 

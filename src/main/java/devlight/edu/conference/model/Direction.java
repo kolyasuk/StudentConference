@@ -1,6 +1,8 @@
 package devlight.edu.conference.model;
 
-import javax.validation.constraints.NotNull;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -12,9 +14,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Direction {
 
-	@NotNull
+	@Id
+	@GeneratedValue
 	private int id;
 	@NotBlank
 	@Size(min = 2, message = "Direction name must be longer than 2")
