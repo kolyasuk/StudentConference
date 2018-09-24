@@ -16,7 +16,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Override
 	public Application getApplicationById(int id) {
-		return applicationRepository.getOne(id);
+		Application ap = applicationRepository.getOne(id);
+		System.out.println(ap);
+		return ap;
 	}
 
 	@Override
