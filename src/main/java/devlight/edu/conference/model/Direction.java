@@ -23,5 +23,4 @@ public class Direction {
 	@NotBlank
 	@Size(min = 2, message = "Direction name must be longer than 2")
 	private String directionName;
-
 }

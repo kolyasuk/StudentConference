@@ -43,7 +43,7 @@ public class Application implements Serializable {
 	private Date birthdate;
 	@NotNull
 	private int photo_id;
-	@NotNull(message = "Add cv [ls")
+	@NotNull(message = "Add cv pls")
 	private int CV_id;
 	@NotNull
 	private double avarage_mark;
@@ -55,7 +55,5 @@ public class Application implements Serializable {
 	private int curator_id;
 	@NotNull
 	private boolean approved;
-	// @NotNull
-	// private Set<Application_rate> rate_list = new HashSet<Application_rate>(0);
 
 }
