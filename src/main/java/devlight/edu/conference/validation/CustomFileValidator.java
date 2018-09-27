@@ -30,7 +30,6 @@ public class CustomFileValidator implements Validator {
 		if (mfile.isEmpty()) {
 			errors.rejectValue("file", fileRequiredMessage);
 		}
-		System.out.println(mfile.getSize());
 		if (mfile.getSize() > MAX_FILE_SIZE_IN_BYTES) {
 			errors.rejectValue("file", maxSizeMessage);
 		}
