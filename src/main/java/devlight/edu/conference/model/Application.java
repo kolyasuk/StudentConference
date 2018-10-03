@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -49,10 +52,16 @@ public class Application implements Serializable {
 	private double avarage_mark;
 	@Email
 	private String email;
-	@NotNull
-	private int direction_id;
-	@NotNull
-	private int curator_id;
+	// @NotNull
+	// private int direction_id;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "direction_id")
+	private Direction direction;
+	// @NotNull
+	// private int curator_id;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "curator_id")
+	private Curator curator;
 	@NotNull
 	private boolean approved;
 

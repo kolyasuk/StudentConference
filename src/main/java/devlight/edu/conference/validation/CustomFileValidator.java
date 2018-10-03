@@ -25,12 +25,12 @@ public class CustomFileValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		FileUpload fu = (FileUpload) target;
-		MultipartFile mfile = fu.getFile();
-		if (mfile.isEmpty()) {
+		FileUpload file = (FileUpload) target;
+		MultipartFile mf = file.getFile();
+		if (mf.isEmpty()) {
 			errors.rejectValue("file", fileRequiredMessage);
 		}
-		if (mfile.getSize() > MAX_FILE_SIZE_IN_BYTES) {
+		if (mf.getSize() > MAX_FILE_SIZE_IN_BYTES) {
 			errors.rejectValue("file", maxSizeMessage);
 		}
 

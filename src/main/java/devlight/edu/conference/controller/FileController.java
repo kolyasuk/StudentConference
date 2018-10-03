@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import devlight.edu.conference.model.File;
@@ -43,11 +42,12 @@ public class FileController {
 
 	@PostMapping(value = "/file")
 	public ResponseEntity<File> addFile(@ModelAttribute @Validated FileUpload fileUpload) throws IOException {
-		File file = new File();
-		file.setFileData(fileUpload.getFile().getBytes());
-		fileServiceImpl.addFile(file);
+		File fileToDb = new File();
 
-		return new ResponseEntity<>(file, HttpStatus.CREATED);
+		fileToDb.setFileData(fileUpload.getFile().getBytes());
+		fileServiceImpl.addFile(fileToDb);
+
+		return new ResponseEntity<>(fileToDb, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(value = "/file/{id}")
@@ -56,18 +56,17 @@ public class FileController {
 			fileServiceImpl.deleteFile(id);
 	}
 
-	@PutMapping(value = "/file/{id}")
-	public ResponseEntity<?> editFile(@PathVariable("id") int id, @ModelAttribute FileUpload fileUpload) {
-
-		File file = new File();
+	@PostMapping(value = "/updatefile")
+	public ResponseEntity<File> editFile(@ModelAttribute @Validated FileUpload fileUpload) {
+		File fileForUpdate = fileServiceImpl.getFile(fileUpload.getId());
 		try {
-			File fileForUpdate = fileServiceImpl.getFile(id);
 			fileForUpdate.setFileData(fileUpload.getFile().getBytes());
 			fileServiceImpl.editFile(fileForUpdate);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(file, HttpStatus.CREATED);
+
+		return new ResponseEntity<>(fileForUpdate, HttpStatus.CREATED);
 
 	}
 
