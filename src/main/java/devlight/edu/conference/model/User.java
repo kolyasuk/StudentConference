@@ -1,11 +1,16 @@
 package devlight.edu.conference.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -25,10 +30,11 @@ public class User {
 	private int id;
 	@NotBlank
 	@Size(min = 5, message = "Login must be longer then 5")
-	private String login;
+	private String username;
 	@NotBlank
 	@Size(min = 5, message = "Password must be longer then 5")
 	private String password;
-	@NotBlank
-	private String role;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
 }

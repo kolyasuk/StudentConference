@@ -13,10 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Application_rate {
+public class Marks {
 
 	@Id
 	@GeneratedValue
+	private int id;
+	@NotNull
 	private int request_id;
 	@NotNull
 	private int juri_id;

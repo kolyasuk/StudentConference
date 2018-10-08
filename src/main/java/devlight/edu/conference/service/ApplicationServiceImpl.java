@@ -7,12 +7,18 @@ import org.springframework.stereotype.Service;
 
 import devlight.edu.conference.model.Application;
 import devlight.edu.conference.repository.ApplicationRepository;
+import devlight.edu.conference.repository.CuratorRepository;
+import devlight.edu.conference.repository.DirectionRepository;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
 
 	@Autowired
 	ApplicationRepository applicationRepository;
+	@Autowired
+	CuratorRepository curatorRepository;
+	@Autowired
+	DirectionRepository directionRepository;
 
 	@Override
 	public Application getApplicationById(int id) {

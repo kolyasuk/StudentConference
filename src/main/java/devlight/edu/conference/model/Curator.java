@@ -1,13 +1,8 @@
 package devlight.edu.conference.model;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -37,7 +32,8 @@ public class Curator {
 	@NotBlank
 	@Size(min = 10, message = "Description must be longer than 10")
 	private String description;
-	@OneToMany(mappedBy = "curator", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Application> application;
+	// @OneToMany(mappedBy = "curator", cascade = CascadeType.ALL, fetch =
+	// FetchType.LAZY)
+	// private Set<Application> application;
 
 }

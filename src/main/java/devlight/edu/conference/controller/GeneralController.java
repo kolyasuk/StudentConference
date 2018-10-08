@@ -6,6 +6,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javassist.NotFoundException;
+
 @RestControllerAdvice
 public class GeneralController {
 
@@ -14,4 +16,8 @@ public class GeneralController {
 		return new ResponseEntity<>(ex.getAllErrors().get(0).getCode(), HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(NotFoundException.class)
+	public ResponseEntity<?> NotFoundHandler(Exception e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	}
 }
