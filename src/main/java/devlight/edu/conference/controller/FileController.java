@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import devlight.edu.conference.model.File;
 import devlight.edu.conference.model.FileUpload;
 import devlight.edu.conference.service.FileServiceImpl;
 import devlight.edu.conference.validation.CustomFileValidator;
+import javassist.NotFoundException;
 
 @RestController
+@RequestMapping("/file/")
 public class FileController {
 
 	@Autowired
@@ -35,30 +38,28 @@ public class FileController {
 		binder.addValidators(customFileValidator);
 	}
 
-	@GetMapping(value = "/file/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public File getFileById(@PathVariable("id") int id) {
-		return fileServiceImpl.getFile(id);
+	@GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public File getFileById(@PathVariable("id") int id) throws NotFoundException {
+		return fileServiceImpl.getFileById(id);
 	}
 
-	@PostMapping(value = "/file")
+	@PostMapping
 	public ResponseEntity<File> addFile(@ModelAttribute @Validated FileUpload fileUpload) throws IOException {
 		File fileToDb = new File();
-
 		fileToDb.setFileData(fileUpload.getFile().getBytes());
 		fileServiceImpl.addFile(fileToDb);
-
 		return new ResponseEntity<>(fileToDb, HttpStatus.CREATED);
 	}
 
-	@DeleteMapping(value = "/file/{id}")
-	public void deleteFileById(int id) {
-		if (fileServiceImpl.getFile(id) == null)
+	@DeleteMapping(value = "{id}")
+	public void deleteFileById(int id) throws NotFoundException {
+		if (fileServiceImpl.getFileById(id) == null)
 			fileServiceImpl.deleteFile(id);
 	}
 
-	@PostMapping(value = "/updatefile")
-	public ResponseEntity<File> editFile(@ModelAttribute @Validated FileUpload fileUpload) {
-		File fileForUpdate = fileServiceImpl.getFile(fileUpload.getId());
+	@PostMapping(value = "update")
+	public ResponseEntity<File> editFile(@ModelAttribute @Validated FileUpload fileUpload) throws NotFoundException {
+		File fileForUpdate = fileServiceImpl.getFileById(fileUpload.getId());
 		try {
 			fileForUpdate.setFileData(fileUpload.getFile().getBytes());
 			fileServiceImpl.editFile(fileForUpdate);

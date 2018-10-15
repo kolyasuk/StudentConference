@@ -13,14 +13,16 @@ public interface UserService {
 
 	User getUserById(int id) throws NotFoundException;
 
-	Optional<User> getUserByUsername(String username) throws NotFoundException;
+	User getUserByUsername(String username) throws NotFoundException;
 
-	List<User> getAllUsers();
+	Optional<User> getUserByUsernameRegistration(String username);
+
+	List<User> getAllUsers() throws NotFoundException;
 
 	void addUser(User user);
 
-	void deleteUser(int id);
+	void deleteUser(int id) throws NotFoundException;
 
-	void updateUser(User user);
+	void editUser(User user, boolean oldRoles) throws NotFoundException;
 
 }

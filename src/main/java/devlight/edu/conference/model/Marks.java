@@ -1,5 +1,6 @@
 package devlight.edu.conference.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,9 +20,11 @@ public class Marks {
 	@GeneratedValue
 	private int id;
 	@NotNull
-	private int request_id;
+	@Column(name = "jury_id")
+	private int juryId;
 	@NotNull
-	private int juri_id;
+	@Column(name = "application_id")
+	private int applicationId;
 	@NotNull
 	private double mark;
 

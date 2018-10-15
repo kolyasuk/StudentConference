@@ -18,53 +18,66 @@ import javassist.NotFoundException;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private UserRepository userRepository;
-	private RoleRepository roleRepository;
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
-		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-	}
+	UserRepository userRepository;
+	@Autowired
+	RoleRepository roleRepository;
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
 	public User getUserById(int id) throws NotFoundException {
 		Optional<User> user = userRepository.findById(id);
-		return user.get();
+		if (user.isPresent())
+			return user.get();
+		else
+			throw new NotFoundException("User is not found");
 	}
 
 	@Override
-	public Optional<User> getUserByUsername(String username) throws NotFoundException {
+	public User getUserByUsername(String username) throws NotFoundException {
 		Optional<User> user = userRepository.findByUsername(username);
-		return user;
+		if (user.isPresent())
+			return user.get();
+		else
+			throw new NotFoundException("User is not found");
 	}
 
 	@Override
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	public Optional<User> getUserByUsernameRegistration(String username) {
+		return userRepository.findByUsername(username);
+	}
+
+	@Override
+	public List<User> getAllUsers() throws NotFoundException {
+		if (userRepository.findAll() != null)
+			return userRepository.findAll();
+		else
+			throw new NotFoundException("There are no users in DataBase");
 	}
 
 	@Override
 	public void addUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		// Role userRole = roleRepository.findByRole("ROLE_ADMIN");
 		Role userRole1 = roleRepository.findByRole("ROLE_USER");
 		user.setRoles(new HashSet<Role>(Arrays.asList(userRole1)));
 		userRepository.save(user);
 	}
 
 	@Override
-	public void deleteUser(int id) {
-		userRepository.deleteById(id);
+	public void deleteUser(int id) throws NotFoundException {
+		if (getUserById(id) != null)
+			userRepository.deleteById(id);
 	}
 
 	@Override
-	public void updateUser(User user) {
-		Optional<User> optionalUser = userRepository.findById(user.getId());
-		if (optionalUser.isPresent()) {
-			user.setRoles(optionalUser.get().getRoles());
+	public void editUser(User user, boolean saveOldRoles) throws NotFoundException {
+		User userFromDB = getUserByUsername(user.getUsername());
+		if (userFromDB != null) {
+			if (saveOldRoles == true)
+				user.setRoles(userFromDB.getRoles());
+			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+			user.setId(userFromDB.getId());
 			userRepository.save(user);
 		}
 	}

@@ -1,15 +1,16 @@
 package devlight.edu.conference.service;
 
 import devlight.edu.conference.model.File;
+import javassist.NotFoundException;
 
 public interface FileService {
 
-	void addFile(File file);
+	File addFile(File file);
 
-	File getFile(int id);
+	File getFileById(int id) throws NotFoundException;
 
-	void editFile(File file);
+	File editFile(File file);
 
-	void deleteFile(int id);
+	void deleteFile(int id) throws NotFoundException;
 
 }

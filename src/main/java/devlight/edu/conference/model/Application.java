@@ -44,7 +44,7 @@ public class Application implements Serializable {
 	@NotNull
 	private int photo_id;
 	@NotNull(message = "Add cv pls")
-	private int CV_id;
+	private int cv_id;
 	@NotNull
 	private double avarage_mark;
 	@Email
