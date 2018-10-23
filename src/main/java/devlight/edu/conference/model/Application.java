@@ -56,8 +56,6 @@ public class Application implements Serializable {
 	// private Direction direction;
 	@NotNull
 	private int curator_id;
-	@NotNull
-	private int author_id;
 	// @ManyToOne(fetch = FetchType.EAGER)
 	// @JoinColumn(name = "curator_id")
 	// private Curator curator;

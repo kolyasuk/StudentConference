@@ -1,6 +1,7 @@
 package devlight.edu.conference.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,5 +14,5 @@ public interface MarksRepository extends JpaRepository<Marks, Integer> {
 	List<Marks> findAllByApplicationId(int applicationId);
 
 	@Query("SELECT AVG(m.mark) from Marks m where application_id =?1")
-	double getAverageMark(int application_id);
+	Optional<Double> getAverageMark(int application_id);
 }

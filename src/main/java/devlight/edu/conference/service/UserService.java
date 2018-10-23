@@ -23,6 +23,6 @@ public interface UserService {
 
 	void deleteUser(int id) throws NotFoundException;
 
-	void editUser(User user, boolean oldRoles) throws NotFoundException;
+	void editUser(User user, boolean saveOldRoles) throws NotFoundException;
 
 }
