@@ -81,7 +81,7 @@ public class JuryController {
 	@PutMapping("user")
 	public void editUserAccount(@Valid @RequestBody User user, Principal principal) throws NotFoundException {
 		if (user.getUsername().equals(principal.getName())) {
-			userServiceImpl.editUser(user, true);
+			userServiceImpl.editUser(user);
 		} else
 			throw new IllegalArgumentException("You can't edit another user's password");
 	}

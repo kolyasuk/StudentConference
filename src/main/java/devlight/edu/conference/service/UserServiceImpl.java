@@ -70,11 +70,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void editUser(User user, boolean saveOldRoles) throws NotFoundException {
-		User userFromDB = getUserByUsername(user.getUsername());
+	public void editUser(User user) throws NotFoundException {
+		User userFromDB = getUserById(user.getId());
 		if (userFromDB != null) {
-			if (saveOldRoles == true)
-				user.setRoles(userFromDB.getRoles());
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			user.setId(userFromDB.getId());
 			userRepository.save(user);

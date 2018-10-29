@@ -3,8 +3,6 @@ package devlight.edu.conference.controller;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -27,7 +25,6 @@ import devlight.edu.conference.model.Application;
 import devlight.edu.conference.model.Curator;
 import devlight.edu.conference.model.Direction;
 import devlight.edu.conference.model.File;
-import devlight.edu.conference.model.Role;
 import devlight.edu.conference.model.User;
 import devlight.edu.conference.repository.MarksRepository;
 import devlight.edu.conference.repository.RoleRepository;
@@ -127,18 +124,10 @@ public class AdminController {
 
 	@PutMapping("user")
 	public void editUser(@Valid @RequestBody User user) throws NotFoundException {
-		userServiceImpl.editUser(user, true);
+		userServiceImpl.editUser(user);
 	}
 
-	@PutMapping("userRole/{id}")
-	public void editUserRoles(@PathVariable("id") int id, @Valid @RequestBody Set<Role> roles) throws NotFoundException {
-		User user = userServiceImpl.getUserById(id);
-		Set<Role> rolesFromDB = roles.stream().map(rl -> roleRepository.findByRole(rl.getRole())).collect(Collectors.toSet());
-		user.setRoles(rolesFromDB);
-		userServiceImpl.editUser(user, false);
-	}
-
-	@PutMapping("/verifyApplication/{id}")
+	@PutMapping("/application/{id}")
 	public void approveApplication(@PathVariable("id") int id, @RequestParam("decision") boolean approveValue) throws Exception {
 		Application application = applicationService.getApplicationById(id);
 		application.setApproved(approveValue);
