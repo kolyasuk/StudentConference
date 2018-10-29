@@ -41,13 +41,13 @@ public class GuestController {
 	@Autowired
 	CustomFileValidator customFileValidator;
 
-	@InitBinder
+	@InitBinder("file")
 	public void initBinderFile(WebDataBinder binder) {
 		binder.addValidators(customFileValidator);
 	}
 
 	@PostMapping("application")
-	public void newApplication(@Valid @RequestBody Application application) throws NotFoundException {
+	public void newApplication(@RequestBody @Valid Application application) throws NotFoundException {
 		if (applicationService.addApplication(application) != null) {
 			try {
 				emailSender.sendEmail("Hi, your application added", "Bingo!", application.getEmail());

@@ -71,7 +71,7 @@ public class AdminController {
 	@Autowired
 	RoleRepository roleRepository;
 
-	@InitBinder
+	@InitBinder("file")
 	public void initBinderFile(WebDataBinder binder) {
 		binder.addValidators(customFileValidator);
 	}

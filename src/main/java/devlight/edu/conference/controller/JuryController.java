@@ -52,6 +52,7 @@ public class JuryController {
 		int juryId = userServiceImpl.getUserByUsername(principal.getName()).getId();
 		Marks markFromDB = marksRepository.getOne(mark.getId());
 		if (markFromDB.getJuryId() == juryId && markFromDB.getApplicationId() == mark.getApplicationId()) {
+			mark.setJuryId(juryId);
 			marksRepository.save(mark);
 			Application application = applicationService.getApplicationById(mark.getApplicationId());
 			application.setAvarage_mark(marksRepository.getAverageMark(mark.getApplicationId()).get());
