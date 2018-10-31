@@ -35,7 +35,7 @@ public class JuryController {
 	ApplicationService applicationService;
 
 	@PostMapping("mark")
-	public void createMark(@RequestBody Marks mark, Principal principal) throws NotFoundException {
+	public void createMark(@RequestBody @Valid Marks mark, Principal principal) throws NotFoundException {
 		List<Marks> marksFromDB = marksRepository.findAllByApplicationId(mark.getApplicationId());
 		int juryId = userServiceImpl.getUserByUsername(principal.getName()).getId();
 		if (marksFromDB != null && marksFromDB.stream().map(DBMark -> DBMark.getJuryId() == juryId).count() == 0 || marksFromDB == null) {
@@ -45,20 +45,6 @@ public class JuryController {
 			application.setAvarage_mark(marksRepository.getAverageMark(mark.getApplicationId()).get());
 			applicationService.editApplication(application);
 		}
-	}
-
-	@PutMapping("mark")
-	public void editMark(@RequestBody Marks mark, Principal principal) throws NotFoundException {
-		int juryId = userServiceImpl.getUserByUsername(principal.getName()).getId();
-		Marks markFromDB = marksRepository.getOne(mark.getId());
-		if (markFromDB.getJuryId() == juryId && markFromDB.getApplicationId() == mark.getApplicationId()) {
-			mark.setJuryId(juryId);
-			marksRepository.save(mark);
-			Application application = applicationService.getApplicationById(mark.getApplicationId());
-			application.setAvarage_mark(marksRepository.getAverageMark(mark.getApplicationId()).get());
-			applicationService.editApplication(application);
-		}
-
 	}
 
 	@DeleteMapping("mark/{id}")
@@ -84,11 +70,6 @@ public class JuryController {
 			userServiceImpl.editUser(user);
 		} else
 			throw new IllegalArgumentException("You can't edit another user's password");
-	}
-
-	@DeleteMapping("user")
-	public void deleteUserAccount(Principal principal) throws NotFoundException {
-		userServiceImpl.deleteUser(userServiceImpl.getUserByUsername(principal.getName()).getId());
 	}
 
 }

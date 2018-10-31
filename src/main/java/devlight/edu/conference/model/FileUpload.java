@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class FileUpload {
 	int id;
-	private MultipartFile file;
+	private MultipartFile image;
+	private MultipartFile cv;
 
 }

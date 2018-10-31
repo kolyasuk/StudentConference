@@ -5,19 +5,15 @@ import java.io.IOException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import devlight.edu.conference.model.Application;
-import devlight.edu.conference.model.File;
 import devlight.edu.conference.model.FileUpload;
 import devlight.edu.conference.service.ApplicationService;
 import devlight.edu.conference.service.FileServiceImpl;
@@ -41,13 +37,16 @@ public class GuestController {
 	@Autowired
 	CustomFileValidator customFileValidator;
 
-	@InitBinder("file")
+	@InitBinder
 	public void initBinderFile(WebDataBinder binder) {
-		binder.addValidators(customFileValidator);
+		if (customFileValidator.supports(binder.getTarget().getClass()))
+			binder.addValidators(customFileValidator);
 	}
 
 	@PostMapping("application")
-	public void newApplication(@RequestBody @Valid Application application) throws NotFoundException {
+	public void newApplication(@ModelAttribute @Validated FileUpload fileUpload, @ModelAttribute @Valid Application application) throws NotFoundException, IOException {
+		application.setPhoto_id(fileServiceImpl.addFile(fileUpload.getImage().getBytes()).getId());
+		application.setCv_id(fileServiceImpl.addFile(fileUpload.getCv().getBytes()).getId());
 		if (applicationService.addApplication(application) != null) {
 			try {
 				emailSender.sendEmail("Hi, your application added", "Bingo!", application.getEmail());
@@ -55,14 +54,6 @@ public class GuestController {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@PostMapping("file")
-	public ResponseEntity<File> addFile(@ModelAttribute @Validated FileUpload fileUpload) throws IOException {
-		File fileToDb = new File();
-		fileToDb.setFileData(fileUpload.getFile().getBytes());
-		fileServiceImpl.addFile(fileToDb);
-		return new ResponseEntity<>(fileToDb, HttpStatus.CREATED);
 	}
 
 }

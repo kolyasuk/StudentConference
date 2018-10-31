@@ -16,7 +16,8 @@ public class FileServiceImpl implements FileService {
 	FileRepository fileRepository;
 
 	@Override
-	public File addFile(File file) {
+	public File addFile(byte[] data) {
+		File file = new File(data);
 		return fileRepository.save(file);
 	}
 

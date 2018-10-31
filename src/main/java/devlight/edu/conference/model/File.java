@@ -22,9 +22,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "blob_file")
 public class File implements Serializable {
 
-	/**
-	 * 
-	 */
+	public File(byte[] fileData) {
+		this.fileData = fileData;
+	}
+
 	private static final long serialVersionUID = -3295901568640458637L;
 
 	@Id

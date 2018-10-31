@@ -5,7 +5,7 @@ import javassist.NotFoundException;
 
 public interface FileService {
 
-	File addFile(File file);
+	File addFile(byte[] data);
 
 	File getFileById(int id) throws NotFoundException;
 

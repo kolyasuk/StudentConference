@@ -20,17 +20,18 @@ public class CustomFileValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return FileUpload.class.isAssignableFrom(clazz);
+		return FileUpload.class.equals(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
 		FileUpload file = (FileUpload) target;
-		MultipartFile mf = file.getFile();
-		if (mf.isEmpty()) {
+		MultipartFile mfi = file.getImage();
+		MultipartFile mfc = file.getCv();
+		if (mfi.isEmpty() || mfc.isEmpty()) {
 			errors.rejectValue("file", fileRequiredMessage);
 		}
-		if (mf.getSize() > MAX_FILE_SIZE_IN_BYTES) {
+		if (mfi.getSize() > MAX_FILE_SIZE_IN_BYTES || mfc.getSize() > MAX_FILE_SIZE_IN_BYTES) {
 			errors.rejectValue("file", maxSizeMessage);
 		}
 
