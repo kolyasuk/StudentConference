@@ -51,15 +51,11 @@ public class Application implements Serializable {
 	private String email;
 	@NotNull
 	private int direction_id;
-	// @ManyToOne(fetch = FetchType.EAGER)
-	// @JoinColumn(name = "direction_id")
-	// private Direction direction;
 	@NotNull
 	private int curator_id;
-	// @ManyToOne(fetch = FetchType.EAGER)
-	// @JoinColumn(name = "curator_id")
-	// private Curator curator;
 	@NotNull
 	private boolean approved;
+	@NotNull
+	private boolean revised;
 
 }

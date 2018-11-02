@@ -30,7 +30,6 @@ public class JuryController {
 	MarksRepository marksRepository;
 	@Autowired
 	UserServiceImpl userServiceImpl;
-
 	@Autowired
 	ApplicationService applicationService;
 
@@ -48,20 +47,20 @@ public class JuryController {
 	}
 
 	@DeleteMapping("mark/{id}")
-	public void deleteMark(@PathVariable("id") int id, Principal principal) throws NotFoundException {
+	public void deleteMark(@PathVariable("id") int id, Principal principal) throws Exception {
 		int juryId = userServiceImpl.getUserByUsername(principal.getName()).getId();
 		Marks markFromDB = marksRepository.getOne(id);
-		if (markFromDB.getJuryId() == juryId) {
+		Application application = applicationService.getApplicationById(markFromDB.getApplicationId());
+		if (markFromDB.getJuryId() == juryId && application.isRevised() == false) {
 			marksRepository.delete(markFromDB);
-			Application application = applicationService.getApplicationById(markFromDB.getApplicationId());
 			Optional<Double> mark = marksRepository.getAverageMark(markFromDB.getApplicationId());
 			if (mark.isPresent())
 				application.setAvarage_mark(mark.get());
 			else
 				application.setAvarage_mark(0);
 			applicationService.editApplication(application);
-
-		}
+		} else
+			throw new Exception("You can't delete this mark");
 	}
 
 	@PutMapping("user")

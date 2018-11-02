@@ -130,13 +130,17 @@ public class AdminController {
 	@PutMapping("/application/{id}")
 	public void approveApplication(@PathVariable("id") int id, @RequestParam("decision") boolean approveValue) throws Exception {
 		Application application = applicationService.getApplicationById(id);
-		application.setApproved(approveValue);
-		applicationService.editApplication(application);
-		try {
-			emailSender.sendEmail("Hi, " + application.getName() + ", your application is" + (approveValue ? "" : " not") + " approved!", "Congratulation!", application.getEmail());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		if (application.isRevised() == false) {
+			application.setApproved(approveValue);
+			application.setRevised(true);
+			applicationService.editApplication(application);
+			try {
+				emailSender.sendEmail("Hi, " + application.getName() + ", your application is" + (approveValue ? "" : " not") + " approved!", "Congratulation!", application.getEmail());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else
+			throw new Exception("This application has already revised");
 
 	}
 
