@@ -19,12 +19,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import devlight.edu.conference.configuration.SecurityConstants;
+
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
-	public static final String SECRET = "SecretKeyToGenJWTs";
-	public static final long EXPIRATION_TIME = 864_000_000; // 10 days
-	public static final String TOKEN_PREFIX = "Bearer ";
-	public static final String HEADER_STRING = "Authorization";
-	public static final String SIGN_UP_URL = "/guest/registration";
 
 	public JWTAuthorizationFilter(AuthenticationManager authManager) {
 		super(authManager);
@@ -32,9 +29,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-		String header = req.getHeader(HEADER_STRING);
+		String header = req.getHeader(SecurityConstants.HEADER_STRING);
 
-		if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+		if (header == null || !header.startsWith(SecurityConstants.TOKEN_PREFIX)) {
 			chain.doFilter(req, res);
 			return;
 		}
@@ -46,11 +43,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-		String token = request.getHeader(HEADER_STRING);
+		String token = request.getHeader(SecurityConstants.HEADER_STRING);
 		if (token != null) {
 			// parse the token.
 
-			DecodedJWT decoded = JWT.require(Algorithm.HMAC512(SECRET.getBytes())).build().verify(token.replace(TOKEN_PREFIX, ""));
+			DecodedJWT decoded = JWT.require(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes())).build().verify(token.replace(SecurityConstants.TOKEN_PREFIX, ""));
 			String user = decoded.getSubject();
 
 			List<String> authorities = (List<String>) decoded.getClaims().get("authorities").as(Object.class);

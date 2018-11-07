@@ -1,8 +1,6 @@
 package devlight.edu.conference.controller;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -15,60 +13,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import devlight.edu.conference.model.Application;
 import devlight.edu.conference.model.Marks;
 import devlight.edu.conference.model.User;
-import devlight.edu.conference.repository.MarksRepository;
-import devlight.edu.conference.service.ApplicationService;
-import devlight.edu.conference.service.UserServiceImpl;
-import javassist.NotFoundException;
+import devlight.edu.conference.service.JuryService;
 
 @RestController
 @RequestMapping("/jury/")
 public class JuryController {
 	@Autowired
-	MarksRepository marksRepository;
-	@Autowired
-	UserServiceImpl userServiceImpl;
-	@Autowired
-	ApplicationService applicationService;
+	JuryService juryService;
 
 	@PostMapping("mark")
-	public void createMark(@RequestBody @Valid Marks mark, Principal principal) throws NotFoundException {
-		List<Marks> marksFromDB = marksRepository.findAllByApplicationId(mark.getApplicationId());
-		int juryId = userServiceImpl.getUserByUsername(principal.getName()).getId();
-		if (marksFromDB != null && marksFromDB.stream().map(DBMark -> DBMark.getJuryId() == juryId).count() == 0 || marksFromDB == null) {
-			mark.setJuryId(juryId);
-			marksRepository.save(mark);
-			Application application = applicationService.getApplicationById(mark.getApplicationId());
-			application.setAvarage_mark(marksRepository.getAverageMark(mark.getApplicationId()).get());
-			applicationService.editApplication(application);
-		}
+	public void createMark(@RequestBody @Valid Marks mark, Principal principal) {
+		juryService.createMark(mark, principal.getName());
 	}
 
 	@DeleteMapping("mark/{id}")
-	public void deleteMark(@PathVariable("id") int id, Principal principal) throws Exception {
-		int juryId = userServiceImpl.getUserByUsername(principal.getName()).getId();
-		Marks markFromDB = marksRepository.getOne(id);
-		Application application = applicationService.getApplicationById(markFromDB.getApplicationId());
-		if (markFromDB.getJuryId() == juryId && application.isRevised() == false) {
-			marksRepository.delete(markFromDB);
-			Optional<Double> mark = marksRepository.getAverageMark(markFromDB.getApplicationId());
-			if (mark.isPresent())
-				application.setAvarage_mark(mark.get());
-			else
-				application.setAvarage_mark(0);
-			applicationService.editApplication(application);
-		} else
-			throw new Exception("You can't delete this mark");
+	public void deleteMark(@PathVariable("id") int markId, Principal principal) {
+		juryService.deleteMark(markId, principal.getName());
 	}
 
 	@PutMapping("user")
-	public void editUserAccount(@Valid @RequestBody User user, Principal principal) throws NotFoundException {
-		if (user.getUsername().equals(principal.getName())) {
-			userServiceImpl.editUser(user);
-		} else
-			throw new IllegalArgumentException("You can't edit another user's password");
+	public void editJuryAccount(@Valid @RequestBody User user, Principal principal) {
+		juryService.editJuryAccount(user, principal.getName());
 	}
 
 }

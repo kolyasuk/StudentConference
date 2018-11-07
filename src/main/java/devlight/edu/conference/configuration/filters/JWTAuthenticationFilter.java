@@ -21,15 +21,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import devlight.edu.conference.configuration.SecurityConstants;
 import devlight.edu.conference.model.User;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-	public static final String SECRET = "SecretKeyToGenJWTs";
-	public static final long EXPIRATION_TIME = 864_000_000; // 10 days
-	public static final String TOKEN_PREFIX = "Bearer ";
-	public static final String HEADER_STRING = "Authorization";
-	public static final String SIGN_UP_URL = "/guest/registration";
 
 	private AuthenticationManager authenticationManager;
 
@@ -53,9 +48,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		List<String> authorityList = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
 
 		String token = JWT.create().withSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername()).withArrayClaim("authorities", authorityList.toArray(new String[authorityList.size()]))
-				.sign(Algorithm.HMAC512(SECRET.getBytes()));
+				.sign(Algorithm.HMAC512(SecurityConstants.SECRET.getBytes()));
 
-		res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+		res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 	}
 
 }

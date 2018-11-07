@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +28,8 @@ public class Marks {
 	@Column(name = "application_id")
 	private int applicationId;
 	@NotNull
+	@Min(value = 0, message = "Mark can not be less than {value}")
+	@Max(value = 10, message = "Mark can not be bigger than {value}")
 	private double mark;
 
 }

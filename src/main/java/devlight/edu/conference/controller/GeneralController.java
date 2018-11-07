@@ -13,7 +13,7 @@ public class GeneralController {
 
 	@ExceptionHandler(BindException.class)
 	public ResponseEntity<?> validationErrorHandler(BindException ex) {
-		return new ResponseEntity<>(ex.getAllErrors().get(0).getCode(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(ex.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(NotFoundException.class)

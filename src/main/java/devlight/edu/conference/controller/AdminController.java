@@ -2,7 +2,6 @@ package devlight.edu.conference.controller;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -17,23 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import devlight.edu.conference.model.Application;
 import devlight.edu.conference.model.Curator;
 import devlight.edu.conference.model.Direction;
 import devlight.edu.conference.model.File;
 import devlight.edu.conference.model.User;
-import devlight.edu.conference.repository.MarksRepository;
-import devlight.edu.conference.repository.RoleRepository;
-import devlight.edu.conference.service.ApplicationService;
-import devlight.edu.conference.service.CuratorServiceImpl;
-import devlight.edu.conference.service.DirectionServiceImpl;
-import devlight.edu.conference.service.FileServiceImpl;
-import devlight.edu.conference.service.UserServiceImpl;
-import devlight.edu.conference.utils.EmailSender;
+import devlight.edu.conference.service.AdminService;
 import devlight.edu.conference.validation.CustomFileValidator;
 import javassist.NotFoundException;
 
@@ -42,31 +32,10 @@ import javassist.NotFoundException;
 public class AdminController {
 
 	@Autowired
-	EmailSender emailSender;
-
-	@Autowired
-	FileServiceImpl fileServiceImpl;
+	AdminService adminService;
 
 	@Autowired
 	CustomFileValidator customFileValidator;
-
-	@Autowired
-	UserServiceImpl userServiceImpl;
-
-	@Autowired
-	ApplicationService applicationService;
-
-	@Autowired
-	MarksRepository marksRepository;
-
-	@Autowired
-	CuratorServiceImpl curatorServiceImpl;
-
-	@Autowired
-	DirectionServiceImpl directionServiceImpl;
-
-	@Autowired
-	RoleRepository roleRepository;
 
 	@InitBinder("file")
 	public void initBinderFile(WebDataBinder binder) {
@@ -75,102 +44,77 @@ public class AdminController {
 
 	@GetMapping(value = "file/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public File getFileById(@PathVariable("id") int id) throws NotFoundException {
-		return fileServiceImpl.getFileById(id);
+		return adminService.getFile(id);
 	}
 
 	@GetMapping("user/id/{id}")
-	public User getUserById(@PathVariable("id") int id) throws NotFoundException {
-		return userServiceImpl.getUserById(id);
+	public User getUserById(@PathVariable("id") int id) {
+		return adminService.getUser(id);
 	}
 
-	@GetMapping(value = "user/username/{username}")
-	public User getUserByUsername(@PathVariable("username") String username) throws NotFoundException {
-		return userServiceImpl.getUserByUsername(username);
+	@GetMapping("user/username/{username}")
+	public User getUserByUsername(@PathVariable("username") String username) {
+		return adminService.getUser(username);
 	}
 
 	@GetMapping("user")
 	public List<User> getAllUsers() throws NotFoundException {
-		return userServiceImpl.getAllUsers();
+		return adminService.getAllUsers();
 	}
 
-	@RequestMapping(value = "registration", method = RequestMethod.POST)
-	public void createNewUser(@Valid @RequestBody User user) throws Exception {
-		Optional<User> oUser = userServiceImpl.getUserByUsernameRegistration(user.getUsername());
-		if (oUser.isPresent()) {
-			throw new IllegalArgumentException("User is already exist");
-		}
-		userServiceImpl.addUser(user);
+	@PostMapping("registration")
+	public void createNewUser(@Valid @RequestBody User user) {
+		adminService.addUser(user);
 	}
 
 	@PostMapping("direction")
 	public Direction addDirection(@Valid @RequestBody Direction direction) throws NotFoundException {
-		return directionServiceImpl.addDirection(direction);
+		return adminService.addDirection(direction);
 	}
 
 	@PostMapping("curator")
 	public Curator addCurator(@Valid @RequestBody Curator curator) throws NotFoundException {
-		return curatorServiceImpl.addCurator(curator);
+		return adminService.addCurator(curator);
 	}
 
 	@PutMapping("direction")
 	public void editDirection(@Valid @RequestBody Direction direction) {
-		directionServiceImpl.editDirection(direction);
+		adminService.editDirection(direction);
 	}
 
 	@PutMapping("curator")
 	public void editCurator(@Valid @RequestBody Curator curator) {
-		curatorServiceImpl.editCurator(curator);
+		adminService.editCurator(curator);
 	}
 
 	@PutMapping("user")
-	public void editUser(@Valid @RequestBody User user) throws NotFoundException {
-		userServiceImpl.editUser(user);
+	public void editUser(@Valid @RequestBody User user) {
+		adminService.editUser(user);
 	}
 
-	@PutMapping("/application/{id}")
+	@PutMapping("application/{id}")
 	public void approveApplication(@PathVariable("id") int id, @RequestParam("decision") boolean approveValue) throws Exception {
-		Application application = applicationService.getApplicationById(id);
-		if (application.isRevised() == false) {
-			application.setApproved(approveValue);
-			application.setRevised(true);
-			applicationService.editApplication(application);
-			try {
-				emailSender.sendEmail("Hi, " + application.getName() + ", your application is" + (approveValue ? "" : " not") + " approved!", "Congratulation!", application.getEmail());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else
-			throw new Exception("This application has already revised");
-
-	}
-
-	@DeleteMapping("file/{id}")
-	public void deleteFileById(int id) throws NotFoundException {
-		if (fileServiceImpl.getFileById(id) == null)
-			fileServiceImpl.deleteFile(id);
+		adminService.approveApplication(id, approveValue);
 	}
 
 	@DeleteMapping("/direction/{id}")
 	public void deleteDirection(@PathVariable("id") int id) throws NotFoundException {
-		directionServiceImpl.deleteDirection(id);
+		adminService.deleteDirection(id);
 	}
 
 	@DeleteMapping("/curator/{id}")
 	public void deleteCurator(@PathVariable("id") int id) throws NotFoundException {
-		curatorServiceImpl.deleteCurator(id);
+		adminService.deleteCurator(id);
 	}
 
 	@DeleteMapping("/application/{id}")
-	public void deleteApplication(@PathVariable("id") int id) throws NotFoundException {
-		applicationService.deleteApplication(id);
+	public void deleteApplication(@PathVariable("id") int id) {
+		adminService.deleteApplication(id);
 	}
 
 	@DeleteMapping("user/{id}")
-	public void deleteUserById(int id, Principal principal) throws Exception {
-		if (userServiceImpl.getUserByUsername(principal.getName()).getId() != id)
-			userServiceImpl.deleteUser(id);
-		else
-			throw new Exception("You can't delete your account");
+	public void deleteUserById(int id, Principal principal) {
+		adminService.deleteUser(id, principal.getName());
 	}
 
 }

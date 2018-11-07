@@ -1,4 +1,4 @@
-package devlight.edu.conference.utils;
+package devlight.edu.conference.service;
 
 import javax.mail.internet.MimeMessage;
 
@@ -13,7 +13,7 @@ public class EmailSender {
 	@Autowired
 	private JavaMailSender sender;
 
-	public void sendEmail(String text, String subject, String to) throws Exception {
+	public void sendEmail(String to, String subject, String text) throws Exception {
 		MimeMessage message = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 

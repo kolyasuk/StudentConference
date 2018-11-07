@@ -1,11 +1,6 @@
 package devlight.edu.conference.configuration;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,19 +17,9 @@ import devlight.edu.conference.service.UserDetailsServiceImpl;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
-	public static final String SIGN_UP_URL = "/guest/registration";
 
 	private UserDetailsServiceImpl userDetailsService;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-	@Autowired
-	private DataSource dataSource;
-
-	@Value("${spring.queries.users-query}")
-	private String usersQuery;
-
-	@Value("${spring.queries.roles-query}")
-	private String rolesQuery;
 
 	public WebSecurity(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.userDetailsService = userDetailsService;
@@ -43,7 +28,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll().antMatchers("/jury/**").hasRole("JURY").antMatchers("/admin/**").hasRole("ADMIN").and()
+		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/guest/**").anonymous().antMatchers("/jury/**").hasRole("JURY").antMatchers("/admin/**").hasRole("ADMIN").and()
 				.addFilter(new JWTAuthenticationFilter(authenticationManager())).addFilter(new JWTAuthorizationFilter(authenticationManager()))
 				// this disables session creation on Spring Security
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
