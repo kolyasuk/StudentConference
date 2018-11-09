@@ -2,7 +2,6 @@ package devlight.edu.conference.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -13,18 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import devlight.edu.conference.model.Application;
 import devlight.edu.conference.model.FileUpload;
-import devlight.edu.conference.service.GuestService;
+import devlight.edu.conference.service.GuestServiceImpl;
 import devlight.edu.conference.validation.CustomFileValidator;
 
 @RestController
 @RequestMapping("/guest/")
 public class GuestController {
 
-	@Autowired
-	CustomFileValidator customFileValidator;
+	private final CustomFileValidator customFileValidator;
+	private final GuestServiceImpl guestService;
 
-	@Autowired
-	GuestService guestService;
+	public GuestController(CustomFileValidator customFileValidator, GuestServiceImpl guestService) {
+		this.customFileValidator = customFileValidator;
+		this.guestService = guestService;
+	}
 
 	@InitBinder
 	public void initBinderFile(WebDataBinder binder) {

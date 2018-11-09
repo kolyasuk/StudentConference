@@ -5,12 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,26 +19,20 @@ import devlight.edu.conference.model.Curator;
 import devlight.edu.conference.model.Direction;
 import devlight.edu.conference.model.File;
 import devlight.edu.conference.model.User;
-import devlight.edu.conference.service.AdminService;
-import devlight.edu.conference.validation.CustomFileValidator;
+import devlight.edu.conference.service.AdminServiceImpl;
 import javassist.NotFoundException;
 
 @RestController
 @RequestMapping("/admin/")
 public class AdminController {
 
-	@Autowired
-	AdminService adminService;
+	private final AdminServiceImpl adminService;
 
-	@Autowired
-	CustomFileValidator customFileValidator;
-
-	@InitBinder("file")
-	public void initBinderFile(WebDataBinder binder) {
-		binder.addValidators(customFileValidator);
+	public AdminController(AdminServiceImpl adminService) {
+		this.adminService = adminService;
 	}
 
-	@GetMapping(value = "file/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "file/{id}")
 	public File getFileById(@PathVariable("id") int id) throws NotFoundException {
 		return adminService.getFile(id);
 	}

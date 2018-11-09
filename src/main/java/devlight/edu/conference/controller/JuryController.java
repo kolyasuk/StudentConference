@@ -4,7 +4,6 @@ import java.security.Principal;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import devlight.edu.conference.model.Marks;
 import devlight.edu.conference.model.User;
-import devlight.edu.conference.service.JuryService;
+import devlight.edu.conference.service.JuryServiceImpl;
 
 @RestController
 @RequestMapping("/jury/")
 public class JuryController {
-	@Autowired
-	JuryService juryService;
+	private final JuryServiceImpl juryService;
+
+	public JuryController(JuryServiceImpl juryService) {
+		super();
+		this.juryService = juryService;
+	}
 
 	@PostMapping("mark")
 	public void createMark(@RequestBody @Valid Marks mark, Principal principal) {
