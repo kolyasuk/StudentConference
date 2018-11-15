@@ -38,10 +38,11 @@ public class JuryServiceImpl implements JuryService {
 	public Marks createMark(Marks mark, String username) {
 		List<Marks> marksFromDB = marksRepository.findAllByApplicationId(mark.getApplicationId());
 		int juryId = userRepository.findByUsername(username).get().getId();
-		if (marksFromDB != null && marksFromDB.stream().map(DBMark -> DBMark.getJuryId() == juryId).count() == 0 || marksFromDB == null) {
+		if (marksFromDB != null && marksFromDB.stream().filter(DBMark -> DBMark.getJuryId() == juryId).count() == 0 || marksFromDB == null) {
 			marksRepository.save(mark);
 			Application application = applicationRepository.getOne(mark.getApplicationId());
 			application.setAvarage_mark(marksRepository.getAverageMark(mark.getApplicationId()).get());
+			applicationRepository.save(application);
 			return mark;
 		} else
 			throw new IllegalArgumentException("You have already rate this mark");

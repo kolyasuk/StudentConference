@@ -29,6 +29,7 @@ public class GuestServiceImpl implements GuestService {
 		application.setPhoto_id(fileRepository.save(image).getId());
 		application.setCv_id(fileRepository.save(CV).getId());
 		Application savedApplication = applicationRepository.save(application);
+
 		sendMessage(savedApplication);
 		return savedApplication;
 	}

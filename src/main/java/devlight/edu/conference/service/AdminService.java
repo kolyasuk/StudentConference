@@ -20,9 +20,9 @@ public interface AdminService {
 
 	void addUser(User user);
 
-	void editUser(User user);
+	void editUser(User user) throws NotFoundException;
 
-	void deleteUser(int id, String username);
+	void deleteUser(int id, String username) throws NotFoundException;
 
 	Direction addDirection(Direction direction) throws NotFoundException;
 

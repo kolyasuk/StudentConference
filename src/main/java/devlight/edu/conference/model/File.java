@@ -26,6 +26,10 @@ public class File implements Serializable {
 		this.fileData = fileData;
 	}
 
+	public File(int id) {
+		this.id = id;
+	}
+
 	private static final long serialVersionUID = -3295901568640458637L;
 
 	@Id

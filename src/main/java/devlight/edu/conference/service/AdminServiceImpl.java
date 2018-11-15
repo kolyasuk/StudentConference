@@ -81,27 +81,31 @@ public class AdminServiceImpl implements AdminService {
 			throw new IllegalArgumentException("User is already exist");
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		if (user.getRoles().isEmpty())
-			user.setRoles(new HashSet<Role>(Arrays.asList(roleRepository.findByRole("ROLE_JURY"))));
+		user.setRoles(new HashSet<Role>(Arrays.asList(roleRepository.findByRole("ROLE_JURY"))));
 		userRepository.save(user);
 	}
 
 	@Override
-	public void editUser(User user) {
+	public void editUser(User user) throws NotFoundException {
 		Optional<User> userFromDB = userRepository.findById(user.getId());
 		if (userFromDB.isPresent()) {
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			user.setRoles(userFromDB.get().getRoles());
 			userRepository.save(user);
-		}
+		} else
+			throw new NotFoundException("User is not found");
 	}
 
 	@Override
-	public void deleteUser(int id, String username) {
-		if (userRepository.findByUsername(username).get().getId() != id)
-			userRepository.deleteById(id);
-		else
-			throw new IllegalArgumentException("You can't delete your account");
+	public void deleteUser(int id, String username) throws NotFoundException {
+		Optional<User> user = userRepository.findByUsername(username);
+		if (user.isPresent()) {
+			if (user.get().getId() != id)
+				userRepository.deleteById(id);
+			else if (userRepository.findByUsername(username).get().getId() == id)
+				throw new IllegalArgumentException("You can't delete your account");
+		} else
+			throw new NotFoundException("User is not found");
 	}
 
 	@Override
