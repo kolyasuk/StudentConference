@@ -78,7 +78,7 @@ public class AdminController {
 	}
 
 	@PutMapping("user")
-	public void editUser(@Valid @RequestBody User user) {
+	public void editUser(@Valid @RequestBody User user) throws NotFoundException {
 		adminService.editUser(user);
 	}
 
@@ -103,7 +103,7 @@ public class AdminController {
 	}
 
 	@DeleteMapping("user/{id}")
-	public void deleteUserById(int id, Principal principal) {
+	public void deleteUserById(int id, Principal principal) throws NotFoundException {
 		adminService.deleteUser(id, principal.getName());
 	}
 

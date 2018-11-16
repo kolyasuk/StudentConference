@@ -37,6 +37,7 @@ public class CustomFileValidator implements Validator {
 		}
 		if (mfimg.getSize() > MAX_FILE_SIZE_IN_BYTES || mfcv.getSize() > MAX_FILE_SIZE_IN_BYTES) {
 			errors.rejectValue("file", maxSizeMessage);
+
 		}
 		if (!IMAGE_FILE_MIME_TYPES.contains(mfimg.getContentType()) || !mfcv.getContentType().equals(CV_FILE_MIME_TYPES)) {
 			errors.rejectValue("file", fileFormatMessage);

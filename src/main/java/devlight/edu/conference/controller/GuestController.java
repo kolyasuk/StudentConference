@@ -34,8 +34,8 @@ public class GuestController {
 	}
 
 	@PostMapping("application")
-	public void createApplication(@ModelAttribute @Validated FileUpload fileUpload, @ModelAttribute @Valid Application application) throws Exception {
-		guestService.createApplication(fileUpload, application);
+	public Application createApplication(@ModelAttribute @Validated FileUpload fileUpload, @ModelAttribute @Valid Application application) throws Exception {
+		return guestService.createApplication(fileUpload, application);
 	}
 
 }

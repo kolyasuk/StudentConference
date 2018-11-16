@@ -27,3 +27,16 @@ mvnw.cmd
 /dist/
 /nbdist/
 /.nb-gradle/
+bin/src/main/java/devlight/edu/conference/controller/AdminController.class
+bin/src/main/java/devlight/edu/conference/controller/GeneralController.class
+bin/src/main/java/devlight/edu/conference/controller/UserController.class
+bin/src/main/java/devlight/edu/conference/model/Application.class
+bin/src/main/java/devlight/edu/conference/model/Application_rate.class
+bin/src/main/java/devlight/edu/conference/model/Curator.class
+bin/src/main/java/devlight/edu/conference/model/Direction.class
+bin/src/main/java/devlight/edu/conference/model/User.class
+bin/src/main/java/devlight/edu/conference/service/ApplicationService.class
+bin/src/main/java/devlight/edu/conference/service/ApplicationServiceImpl.class
+bin/src/main/java/devlight/edu/conference/service/UserService.class
+bin/src/main/java/devlight/edu/conference/StudentConferenceApplication.class
+bin/src/test/java/com/example/demo/StudentConferenceApplicationTests.class

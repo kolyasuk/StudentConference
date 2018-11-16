@@ -1,4 +1,4 @@
-package devlight.edu.conference;
+package devlight.edu.conference.unit;
 
 import java.util.Arrays;
 import java.util.HashSet;

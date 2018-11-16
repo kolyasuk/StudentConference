@@ -1,4 +1,4 @@
-package devlight.edu.conference;
+package devlight.edu.conference.unit;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,10 +20,12 @@ import devlight.edu.conference.repository.ApplicationRepository;
 import devlight.edu.conference.repository.FileRepository;
 import devlight.edu.conference.service.EmailSender;
 import devlight.edu.conference.service.GuestServiceImpl;
+import devlight.edu.conference.validation.CustomFileValidator;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class GuestServiceTest {
+	private final static String SOME_VALUE = "test";
 
 	@Autowired
 	GuestServiceImpl guestService;
@@ -45,9 +47,10 @@ public class GuestServiceTest {
 		Application application = new Application();
 		application.setEmail("some@mail.ru");
 
-		MultipartFile mockMF = new MockMultipartFile("name", "".getBytes());
-		Mockito.when(fileUpload.getImage()).thenReturn(mockMF);
-		Mockito.when(fileUpload.getCv()).thenReturn(mockMF);
+		MultipartFile image = new MockMultipartFile("image", "image.jpg", CustomFileValidator.IMAGE_FILE_MIME_TYPES, SOME_VALUE.getBytes());
+		MultipartFile cv = new MockMultipartFile("cv", "cv.docx", CustomFileValidator.CV_FILE_MIME_TYPES, SOME_VALUE.getBytes());
+		Mockito.when(fileUpload.getImage()).thenReturn(image);
+		Mockito.when(fileUpload.getCv()).thenReturn(cv);
 		Mockito.when(fileRepository.save(ArgumentMatchers.any(File.class))).thenReturn(new File(1), new File(2));
 
 		Mockito.when(applicationRepository.save(application)).thenReturn(application);
@@ -58,10 +61,7 @@ public class GuestServiceTest {
 		Assert.assertEquals(2, application.getCv_id());
 
 		Mockito.verify(applicationRepository, Mockito.times(1)).save(application);
-		Mockito.verify(emailSender, Mockito.times(1)).sendEmail(
-				ArgumentMatchers.eq(application.getEmail()),
-				ArgumentMatchers.anyString(), 
-				ArgumentMatchers.anyString());
+		Mockito.verify(emailSender, Mockito.times(1)).sendEmail(ArgumentMatchers.eq(application.getEmail()), ArgumentMatchers.anyString(), ArgumentMatchers.anyString());
 
 	}
 
