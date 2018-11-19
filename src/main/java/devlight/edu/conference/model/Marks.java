@@ -21,15 +21,15 @@ public class Marks {
 	@Id
 	@GeneratedValue
 	private int id;
-	@NotNull
+	@NotNull(message = "{marks.juryId.notNull}")
 	@Column(name = "jury_id")
 	private int juryId;
-	@NotNull
+	@NotNull(message = "{marks.applicationId.notNull}")
 	@Column(name = "application_id")
 	private int applicationId;
 	@NotNull
-	@Min(value = 0, message = "Mark can not be less than {value}")
-	@Max(value = 10, message = "Mark can not be bigger than {value}")
+	@Min(value = 0, message = "{marks.mark.size.min}")
+	@Max(value = 10, message = "{marks.mark.size.max}")
 	private double mark;
 
 }

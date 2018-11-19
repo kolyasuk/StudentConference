@@ -15,11 +15,11 @@ public class CustomFileValidator implements Validator {
 	public static final String IMAGE_FILE_MIME_TYPES = "image/gif, image/jpeg, image/pjpeg, image/png";
 	public static final String CV_FILE_MIME_TYPES = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-	@Value("${upload.file.size.max}")
+	@Value("{upload.file.size.max}")
 	private String maxSizeMessage;
-	@Value("${upload.file.required}")
+	@Value("{upload.file.required}")
 	private String fileRequiredMessage;
-	@Value("${upload.file.format}")
+	@Value("{upload.file.format}")
 	private String fileFormatMessage;
 
 	@Override

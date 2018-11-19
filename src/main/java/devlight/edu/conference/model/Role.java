@@ -18,7 +18,7 @@ public class Role {
 	@Id
 	@GeneratedValue
 	private int id;
-	@NotBlank
+	@NotBlank(message = "{role.role.notNull}")
 	private String role;
 
 }

@@ -21,15 +21,15 @@ public class Curator {
 	@GeneratedValue
 	private int id;
 	@NotBlank
-	@Size(min = 2, message = "Name must be longer than 2")
+	@Size(min = 2, max = 15, message = "{curator.name.size.min}")
 	private String name;
 	@NotBlank
-	@Size(min = 2, message = "Surname must be longer than 2")
+	@Size(min = 2, max = 15, message = "{curator.surname.size.min}")
 	private String surname;
-	@NotNull
+	@NotNull(message = "{curator.photo_id.notNull}")
 	private int photo_id;
 	@NotBlank
-	@Size(min = 10, message = "Description must be longer than 10")
+	@Size(min = 10, message = "{curator.surname.size.min}")
 	private String description;
 	// @OneToMany(mappedBy = "curator", cascade = CascadeType.ALL, fetch =
 	// FetchType.LAZY)

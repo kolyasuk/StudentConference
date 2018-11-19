@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -30,33 +29,40 @@ public class Application implements Serializable {
 	@Id
 	@GeneratedValue
 	private int id;
+
 	@NotBlank
-	@Size(min = 2, message = "Name must be longer than {min}")
+	@Size(min = 2, message = "{application.name.size.min}")
 	private String name;
+
 	@NotBlank
-	@Size(min = 2, message = "Surname must be longer than {min}")
+	@Size(min = 2, message = "{application.surname.size.min}")
 	private String surname;
+
 	@NotBlank
-	@Size(min = 10, message = "Phone number size  must be longer than {min}")
+	@Size(min = 10, message = "{application.phone.size.min}")
 	private String phone;
-	@NotNull
+
+	@NotNull(message = "{NotNull.application}")
 	private Date birthdate;
-	@NotNull(message = "Add photo pls")
+
+	@NotNull(message = "{NotNull.application}")
 	private int photo_id;
-	@NotNull(message = "Add CV pls")
+
+	@NotNull(message = "{NotNull.application}")
 	private int cv_id;
-	@NotNull
-	@Min(value = 0, message = "Mark can not be less than {value}")
-	@Max(value = 10, message = "Mark can not be biger than {value}")
-	private double avarage_mark;
-	@Email(message = "Use email format like this: \"example@gmail.com\" ")
+
+	@Email(message = "{application.email.format}")
 	private String email;
-	@Min(value = 0, message = "Direction cannot be less than {value}")
-	@NotNull(message = "Cannot be null")
+
+	@Min(value = 0, message = "{application.direction_id.size.min}")
+	@NotNull(message = "{NotNull.application}")
 	private int direction_id;
-	@Min(value = 0, message = "Curator cannot be less than {value}")
-	@NotNull(message = "Cannot be null")
+
+	@Min(value = 0, message = "{application.curator_id.size.min}")
+	@NotNull(message = "{NotNull.application}")
 	private int curator_id;
+
+	private double avarage_mark;
 	private boolean approved;
 	private boolean revised;
 

@@ -30,10 +30,10 @@ public class User {
 	@GeneratedValue
 	private int id;
 	@NotBlank
-	@Size(min = 5, message = "Login must be longer then 5")
+	@Size(min = 5, max = 15, message = "{user.username.size}")
 	private String username;
 	@NotBlank
-	@Size(min = 5, message = "Password must be longer then 5")
+	@Size(min = 5, max = 15, message = "{user.password.size}")
 	private String password;
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

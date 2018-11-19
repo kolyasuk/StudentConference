@@ -21,7 +21,7 @@ public class Direction {
 	@GeneratedValue
 	private int id;
 	@NotBlank
-	@Size(min = 2, message = "Direction name must be longer than 2")
+	@Size(min = 2, max = 15, message = "{direction.directionName.size.min}")
 	@Column(name = "direction_name")
 	private String directionName;
 	// @OneToMany(mappedBy = "direction", cascade = CascadeType.ALL, fetch =
